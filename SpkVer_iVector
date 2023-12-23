@@ -1,0 +1,71 @@
+QT       += core gui
+
+QMAKE_CXXFLAGS += -fopenmp
+QMAKE_LFLAGS += -fopenmp
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
+CONFIG += c++11
+
+# You can make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+SOURCES += \
+    src/Log4AVA.cpp \
+    src/enrollFRRFAR.cpp \
+    src/unittests.cpp \
+    src\gpldamodel.cpp \
+    src\trainTVPMiVector.cpp \
+    src\filelists.cpp \
+    src\funhelpers.cpp \
+    src\main.cpp \
+    src\mainwindow.cpp \
+    src\mfccefeatures.cpp \
+    src\mfccextractor.cpp \
+    src\qcustomplot.cpp
+
+HEADERS += \
+    src/Log4AVA.h \
+    src/enrollFRRFAR.h \
+    src/unittests.h \
+    src\gpldamodel.h \
+    src\trainTVPMiVector.h \
+    src\filelists.h \
+    src\funhelpers.h \
+    src\mainwindow.h \
+    src\mfccefeatures.h \
+    src\mfccextractor.h \    
+    src\qcustomplot.h
+
+INCLUDEPATH += j:\SpkVer_iVector\SpkVer_iVector\libs\armadillo-10.7.0\include \
+               j:\SpkVer_iVector\SpkVer_iVector\libs\eigen-3.4.0 \
+               j:\SpkVer_iVector\SpkVer_iVector\libs\QCustomPlot\qcustomplot \
+               j:\SpkVer_iVector\SpkVer_iVector\libs\OpenBLAS-0.3.18-x64\include
+LIBS += \
+        -Lj:\SpkVer_iVector\SpkVer_iVector\libs\OpenBLAS-0.3.18-x64\lib \
+        -llibopenblas \
+        -lgfortran
+        -fopenmp
+
+FORMS += \
+    mainwindow.ui
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    misc/Bibliografia \
+    misc/README.md \
+    misc/mainwindow19012022 \
+    misc/plik_ini_do_inst_qt \
+    misc/references \
+    misc/references \
+    misc/tmp \
+    misc/todo \
+    misc/variables \
+    misc\plik_ini_do_inst_qt \
+    misc\tmp \
+    misc\todo
