@@ -50,9 +50,12 @@ Waldek Maciejko
 #include <ctime>
 #include <set>
 
+
 #include <QDirIterator>
 
+#include "timeheleprs.h"
 #include "mfccefeatures.h"
+#include "Log4AVA.h"
 
 namespace ava{
 
@@ -133,7 +136,8 @@ arma::mat funkTotalVariabilityVector(unsigned int numTdim,
                                        unsigned int numOfComponents,
                                        std::vector<arma::mat>& FF,
                                        std::vector<arma::mat>& NNcc,
-                                       unsigned int numIterationsTV);
+                                       unsigned int numIterationsTV,
+                                       ava::Log4AVA& logger);
 
 std::map<std::string, arma::mat> funkiVectorFromUBM(arma::mat& repSigma,
                                                     arma::mat& T,
@@ -273,7 +277,7 @@ arma::mat normZprim(arma::mat Y,
                   unsigned int liczbaRamekY,
                   unsigned int numFeatures);
 
-std::string currentTime();
+//std::string currentTime();
 
 std::string extractFNameFrPath(std::string pathToMFCFile);
 
@@ -281,6 +285,8 @@ void saveEnrolFRRFARlList(std::string spkLabel,
                              std::string ss,
                              std::string pathToSave,
                              std::string nameOfTheList);
+
+std::string readFile(std::string const& file);
 
 }
 

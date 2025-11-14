@@ -65,7 +65,12 @@ namespace ava{
                             bool SAVETRAINMODEL,
                             ava::Log4AVA& logger){
 
-        logger.save("*************************", "FUNCTION trainTVPMiVector() START");
+        //logger.save("*************************", "FUNCTION trainTVPMiVector() START");
+
+        std::stringstream ss{};
+        std::string verbose_str{};
+
+        logger.save("\nLog from begining of training module on time: ", ava::currentTime());
 
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -86,9 +91,9 @@ namespace ava{
 
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-        std::stringstream ss{};
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
+        verbose_str = "training module - lists were generated, line: " + std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
+        ss.str("");
 
         //----------------------------- generate config for HTK HCopy.exe
 
@@ -101,9 +106,10 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str = "training module - config file for MFCC was generated, line " + std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
+
 
         //----------------------------------- create string to send to console and call HCopy
         //----------------------------------- result: mfcc files
@@ -116,9 +122,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str =  "training module - MFCC were extracted, line " + std::to_string(__LINE__) + " (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         //----------------------------------- building UBM
         //  1. read generated MFCC and concatenate (dozen files - one speaker)
@@ -142,9 +148,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str = "training module - MFCC were loaded to memory, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         start = std::chrono::high_resolution_clock::now();
         arma::gmm_diag ubmModel;
@@ -166,9 +172,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str =  "training module - UBM was trained, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         normYtrans.clear();
 
@@ -196,9 +202,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str = "training module - Baum Welch was finished, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         //----------------------------------- Total Variability
         /*
@@ -207,9 +213,9 @@ namespace ava{
          * Kenny P. Ouellet P. Dehak N. Gupta V. Dumouchel P. "A study of inter-speaker variability in speaker verification"
          *
          */
-        start = std::chrono::high_resolution_clock::now();
 
         arma::mat sigma = arma::reshape(ubmModel.dcovs, prodNumOfComponentsNumFeatures, 1);
+
         arma::mat repSigma = arma::repmat(sigma, 1, numTdim);
 
         arma::mat T = ava::funkTotalVariabilityVector(numTdim,
@@ -223,14 +229,15 @@ namespace ava{
                                                        numOfComponents,
                                                        F,
                                                        Nc,
-                                                       numIterationsTV);
+                                                       numIterationsTV,
+                                                       logger);
+
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str =  "training module - Total Variability was estimated, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
-
         //----------------------------------- i-Vector
         /*
          *
@@ -264,9 +271,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str =  "training module - iVectors was estimated, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         //----------------------------------- Projection Matrix
         /*
@@ -296,9 +303,9 @@ namespace ava{
 
             stop = std::chrono::high_resolution_clock::now();
             duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+            verbose_str =  "training module - Projecttion Matrix was created, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+            logger.save("Execution in point ", verbose_str);
             ss.str("");
-            ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-            logger.save("log:", ss);
         }
 
         /* WCCN
@@ -317,9 +324,9 @@ namespace ava{
 
             stop = std::chrono::high_resolution_clock::now();
             duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+            verbose_str =  "training module - Within Class Covariance Normalization (WCCN) was estimated, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+            logger.save("Execution in point ", verbose_str);
             ss.str("");
-            ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-            logger.save("log:", ss);
         }
 
         /* G-PLDA
@@ -343,9 +350,9 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str =  "training module - Whitening was performed, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
 
         //Test12
         arma::mat ivectorMatrixAfterNorm(ivectorMatrix.n_rows, ivectorMatrix.n_cols, arma::fill::randn);
@@ -399,28 +406,27 @@ namespace ava{
 
         stop = std::chrono::high_resolution_clock::now();
         duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+        verbose_str = "training module - Gaussian Probabilistic Linear Discriminant Analysis model was trained, line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+        logger.save("Execution in point ", verbose_str);
         ss.str("");
-        ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-        logger.save("log:", ss);
-        //std::cout<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration sec: "<<duration.count()<<std::endl;
 
         arma::mat lam=arma::pinv(lambda);
         ava::gpldaModel gpldaMod(mu, W, V, lam);
 
         if(SAVETRAINMODEL){
 
-            projectionMatrix.save(logger.returnSavePath()+"\\projectionMatrix.csv", arma::csv_ascii);
-            mu.save(logger.returnSavePath()+"\\mu.csv", arma::csv_ascii);
-            W.save(logger.returnSavePath()+"\\W.csv", arma::csv_ascii);
-            V.save(logger.returnSavePath()+"\\V.csv", arma::csv_ascii);
-            lam.save(logger.returnSavePath()+"\\lam.csv", arma::csv_ascii);
-            ubmMu.save(logger.returnSavePath()+"\\ubmMu.csv", arma::csv_ascii);
-            ubmModel.save(logger.returnSavePath()+"\\ubmModel.gmm");
-            T.save(logger.returnSavePath()+"\\T.csv", arma::csv_ascii);
-            TS.save(logger.returnSavePath()+"\\TS.csv", arma::csv_ascii);
-            TSi.save(logger.returnSavePath()+"\\TSi.csv", arma::csv_ascii);
-            normMean.save(logger.returnSavePath()+"\\normMean.csv", arma::csv_ascii);
-            normStd.save(logger.returnSavePath()+"\\normStd.csv", arma::csv_ascii);
+            projectionMatrix.save(logger.returnSavePath()+"/projectionMatrix.csv", arma::csv_ascii);
+            mu.save(logger.returnSavePath()+"/mu.csv", arma::csv_ascii);
+            W.save(logger.returnSavePath()+"/W.csv", arma::csv_ascii);
+            V.save(logger.returnSavePath()+"/V.csv", arma::csv_ascii);
+            lam.save(logger.returnSavePath()+"/lam.csv", arma::csv_ascii);
+            ubmMu.save(logger.returnSavePath()+"/ubmMu.csv", arma::csv_ascii);
+            ubmModel.save(logger.returnSavePath()+"/ubmModel.gmm");
+            T.save(logger.returnSavePath()+"/T.csv", arma::csv_ascii);
+            TS.save(logger.returnSavePath()+"/TS.csv", arma::csv_ascii);
+            TSi.save(logger.returnSavePath()+"/TSi.csv", arma::csv_ascii);
+            normMean.save(logger.returnSavePath()+"/normMean.csv", arma::csv_ascii);
+            normStd.save(logger.returnSavePath()+"/normStd.csv", arma::csv_ascii);
 
             logger.save("MODEL SAVED IN: ", logger.returnSavePath());
 

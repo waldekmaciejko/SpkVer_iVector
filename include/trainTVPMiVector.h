@@ -39,7 +39,6 @@ Waldek Maciejko
 
 #pragma once
 
-#include <QApplication>
 #include <QCoreApplication>
 #include <QStringList>
 #include <QDir>
@@ -51,8 +50,8 @@ Waldek Maciejko
 #include <cstdlib>
 #include <sstream>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+// #include "old-mainwindow.h"
+// #include "ui_mainwindow.h"
 
 #include "mfccefeatures.h"
 #include "mfccextractor.h"

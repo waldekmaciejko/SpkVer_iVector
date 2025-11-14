@@ -46,27 +46,43 @@ Log4AVA::Log4AVA(std::string dir,
                  std::string subPath,
                  std::string currentTime,
                  unsigned int gmmNumComponents,
-                 unsigned int TotalVnumTdim){
+                 unsigned int TotalVnumTdim,
+                 bool verbose){
 
     // create directory to raport and calc
-    std::string pDirectory = dir +
-            "\\" +
-            subPath +
-            "\\" +
-            ava::currentTime()+
-            "_gmm"+std::to_string(gmmNumComponents)+
-            "_TV"+std::to_string(TotalVnumTdim);
+    // std::string pDirectory = dir +
+    //                          subPath +
+    //                          ava::currentTime()+
+    //                          "_gmm"+std::to_string(gmmNumComponents)+
+    //                          "_TV"+std::to_string(TotalVnumTdim);
 
-    std::string pMkdir = "mkdir " + pDirectory;
+    //std::string pMkdir = "mkdir " + pDirectory;
+    //std::system(pMkdir.c_str());
+
+    //this->fileToLog = pDirectory+"/"+currentTime+".log";
+    //this->pathDirToLog = pDirectory;
+
+    std::filesystem::path pDirectory = dir +
+                                       subPath +
+                                       ava::currentTime() +
+                                       "_gmm"+std::to_string(gmmNumComponents)+
+                                       "_TV"+std::to_string(TotalVnumTdim);
+
+    std::string pMkdir = "mkdir " + std::string(pDirectory);
     std::system(pMkdir.c_str());
 
-    this->fileToLog = pDirectory+"\\"+currentTime+".log";
-    this->pathDirToLog = pDirectory;
+    this->fileToLog =std::string(pDirectory) +
+                                    "/"+
+                                    ava::currentTime() +
+                                    ".log";
+
+    this->pathDirToLog = std::string(pDirectory);
+    this->verbose = verbose;
 }
 
 void Log4AVA::saveScore(arma::mat score, bool frr_far){
-    if(frr_far==0)  score.save(this->pathDirToLog+"\\scoreFRR", arma::csv_ascii);
-    if(frr_far==1)  score.save(this->pathDirToLog+"\\scoreFAR", arma::csv_ascii);
+    if(frr_far==0)  score.save(this->pathDirToLog+"/scoreFRR", arma::csv_ascii);
+    if(frr_far==1)  score.save(this->pathDirToLog+"/scoreFAR", arma::csv_ascii);
 }
 
 std::string Log4AVA::returnSavePath(){
@@ -77,30 +93,67 @@ void Log4AVA::save(std::string variableName, std::string variableValue){
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<variableName<<" "<<variableValue<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<variableValue<<std::endl;
+    }
 }
 
 void Log4AVA::save(const char* s1, const char* s2){
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<std::string(s1)<<" "<<std::string(s2)<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << std::string(s1)<<" "<<std::string(s2)<<std::endl;
+    }
+
 }
 
 void Log4AVA::save(std::string variableName, unsigned int variableValue){
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<variableName<<" "<<variableValue<<std::endl;
+    logToFile.close();
 
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<variableValue<<std::endl;
+    }
 }
+
+void Log4AVA::save(std::string variableName, int variableValue){
+    std::ofstream logToFile;
+    logToFile.open(this->fileToLog, std::ios::app);
+    logToFile<<variableName<<" "<<variableValue<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<variableValue<<std::endl;
+    }
+}
+
 void Log4AVA::save(std::string variableName, float variableValue){
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<variableName<<" "<<variableValue<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<variableValue<<std::endl;
+    }
 }
 
 void Log4AVA::save(std::string variableName, bool variableValue){
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<variableName<<" "<<std::boolalpha<<variableValue<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<std::boolalpha<<variableValue<<std::endl;
+    }
 }
 
 void Log4AVA::save(std::string variableName,  std::vector<std::string> pTrain_path){
@@ -110,8 +163,17 @@ void Log4AVA::save(std::string variableName,  std::vector<std::string> pTrain_pa
     for(auto i : pTrain_path){
         logToFile<<i<<std::endl;
     }
-}
+    logToFile.close();
 
+    std::cout << variableName << std::endl;
+
+    if (this->verbose == true){
+
+        for(auto i : pTrain_path){
+            std::cout << i << std::endl;
+        }
+    }
+}
 
 void Log4AVA::save(std::string variableName,
                    std::stringstream& ss){
@@ -120,5 +182,10 @@ void Log4AVA::save(std::string variableName,
     std::ofstream logToFile;
     logToFile.open(this->fileToLog, std::ios::app);
     logToFile<<variableName<<" "<<raport<<std::endl;
+    logToFile.close();
+
+    if (this->verbose == true){
+        std::cout << variableName<<" "<<raport<<std::endl;
     }
+}
 }

@@ -37,21 +37,60 @@ Copyright (C) 2004-2023
 Waldek Maciejko
 */
 
-#include "gpldamodel.h"
-namespace ava{
+#ifndef LOG4AVA_H
+#define LOG4AVA_H
 
-    gpldaModel::gpldaModel()
-    {
+#include <string>
+#include <fstream>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <filesystem>
+#include <armadillo>
+#include "timeheleprs.h"
 
-    }
-    gpldaModel::gpldaModel(arma::mat& _mu,
-                           arma::mat& _W,
-                           arma::mat& _V,
-                           arma::mat& _lambda){
-        this->mu=_mu;
-        this->W=_W;
-        this->V=_V;
-        this->lambda=_lambda;
+//#include "funhelpers.h"
 
-    }
+namespace ava {
+
+class Log4AVA{
+
+private:
+    std::string fileToLog;      // path to file with logs
+    std::string pathDirToLog;   // path to dir with logs
+    bool verbose = false;
+
+public:
+    Log4AVA(std::string dir,
+            std::string subPath,
+            std::string currentTime,
+            unsigned int gmmNumComponents,
+            unsigned int TotalVnumTdim,
+            bool verbose);
+
+    void saveScore(arma::mat score, bool frr_far);
+
+    void save(std::string variableName, std::string variableValue);
+
+    void save(const char* s1, const char* s2);
+
+    void save(std::string variableName, unsigned int variableValue);
+
+    void save(std::string variableName, int variableValue);
+
+    void save(std::string variableName, float variableValue);
+
+    void save(std::string variableName, bool variableValue);
+
+    void save(std::string variableName,  std::vector<std::string> pTrain_path);
+
+    void save(std::string variableName,
+              std::stringstream& ss);
+
+    std::string returnSavePath();
+
+};
+
 }
+
+#endif // LOG4AVA_H

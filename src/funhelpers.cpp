@@ -56,7 +56,7 @@ int analizeDirectoryElement (const char *fpath,
     //std::string workSpace= sciezka_workSpace(path)
 
     std::ofstream saveList;
-    std::string ws= workSpace + "\\list\\flt_fea_mfcc.lst";
+    std::string ws= workSpace + "/list/flt_fea_mfcc.lst";
     saveList.open(ws, std::ios::app);
     saveList<<strFileName<<std::endl;
     saveList.close();
@@ -193,8 +193,10 @@ arma::mat funkTotalVariability(unsigned int numTdim,
 
     arma::mat TtimeInvSSDiag = {};
 
+
     for(unsigned int i=0; i<numIterationsTV; i++)
     {
+
         //1.---- oblicz dystrybucje posteriori zmiennych ukrytych
             TtimeInvSSDiag =T/repSigma;
             for(unsigned int s=0; s<numSpkUBM; s++)
@@ -282,10 +284,11 @@ arma::mat funkTotalVariabilityVector(unsigned int numTdim,
                                        unsigned int numOfComponents,
                                        std::vector<arma::mat>& FF,
                                        std::vector<arma::mat>& NNcc,
-                                       unsigned int numIterationsTV){
+                                       unsigned int numIterationsTV,
+                                       ava::Log4AVA& logger){
 
     arma::mat T=arma::randn(sigma.n_elem, numTdim);
-    T=T/arma::norm(T);
+    T=T/arma::norm(T);    
 
     arma::mat I = arma::eye(numTdim, numTdim);
 
@@ -313,9 +316,13 @@ arma::mat funkTotalVariabilityVector(unsigned int numTdim,
     arma::mat tmp={};
 
     // Test 4 - OK
+    logger.save("Total Variability is training: ", ava::currentTime());
 
     for(unsigned int i=0; i<numIterationsTV; i++)
     {
+        logger.save("  iteration " + std::to_string(i + 1),
+                    " of " + std::to_string(numIterationsTV) + " at time: " + ava::currentTime());
+
         //1.---- estimate posteriori density of hidden variables
         //       (oblicz dystrybucje posteriori zmiennych ukrytych)
             TtimeInvSSDiag =T/repSigma;
@@ -328,7 +335,6 @@ arma::mat funkTotalVariabilityVector(unsigned int numTdim,
                 Ey.push_back(Linv.at(s) * TtimeInvSSDiag.t()*FF.at(s).t());
                 Eyy.push_back(Linv.at(s) + Ey.at(s)*Ey.at(s).t());
             }
-
         // Test 4 - END
 
         //2.---- accumulate statistics for each spk
@@ -372,6 +378,7 @@ arma::mat funkTotalVariabilityVector(unsigned int numTdim,
         }
         T=tmp;
        }
+
     //std::cout<<"T"<<std::endl;
     //T.print();
     return T;
@@ -1181,7 +1188,7 @@ void readRecursivlyMFCCHcopyFile(std::string pWork_path,
     arma::mat Y{};
     std::string p{};
 
-    QDirIterator it_mfcc(QString::fromStdString(pWork_path + "\\" + pFeaMfcc_path),
+    QDirIterator it_mfcc(QString::fromStdString(pWork_path + "/" + pFeaMfcc_path),
                          QStringList()<<"*.mfc", QDir::Files,
                          QDirIterator::Subdirectories);
 
@@ -1261,7 +1268,7 @@ void statBaumWelch(arma::cube& N,
     unsigned int idx_tw=0;
     arma::mat tmp{};
 
-    QDirIterator it_mfcc2(QString::fromStdString(pWork_path + "\\" + pFeaMfcc_path), QStringList()<<"*.mfc", QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it_mfcc2(QString::fromStdString(pWork_path + "/" + pFeaMfcc_path), QStringList()<<"*.mfc", QDir::Files, QDirIterator::Subdirectories);
 
     while(it_mfcc2.hasNext())
     {
@@ -1411,7 +1418,7 @@ void statBaumWelchVector(std::vector<arma::mat>& NN,
     unsigned int idx_tw=0;
     arma::mat tmp{};
 
-    QDirIterator it_mfcc2(QString::fromStdString(pWork_path + "\\" + pFeaMfcc_path), QStringList()<<"*.mfc", QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it_mfcc2(QString::fromStdString(pWork_path + "/" + pFeaMfcc_path), QStringList()<<"*.mfc", QDir::Files, QDirIterator::Subdirectories);
 
     while(it_mfcc2.hasNext())
     {
@@ -1554,27 +1561,27 @@ void randomTestSplit(std::vector<uint>& ranTestNumVector,
     }
 }
 
-/*!
- * \brief currentTime - format string containes date time
- * \param
- * \return
- */
-std::string currentTime(){
+// /*!
+//  * \brief currentTime - format string containes date time
+//  * \param
+//  * \return
+//  */
+// std::string currentTime(){
 
-    std::time_t now = std::time(0);
-    std::tm *ltm = std::localtime(&now);
+//     std::time_t now = std::time(0);
+//     std::tm *ltm = std::localtime(&now);
 
-    std::string t1 = std::to_string(ltm->tm_sec);
-    std::string t2 = std::to_string(ltm->tm_min);
-    std::string t3 = std::to_string(ltm->tm_hour);
-    std::string t4 = std::to_string(ltm->tm_mday);
-    std::string t5 = std::to_string(1+ltm->tm_mon);
-    std::string t6 = std::to_string(1900+ltm->tm_year);
+//     std::string t1 = std::to_string(ltm->tm_sec);
+//     std::string t2 = std::to_string(ltm->tm_min);
+//     std::string t3 = std::to_string(ltm->tm_hour);
+//     std::string t4 = std::to_string(ltm->tm_mday);
+//     std::string t5 = std::to_string(1+ltm->tm_mon);
+//     std::string t6 = std::to_string(1900+ltm->tm_year);
 
-    //std::string t = t3+"h"+t2+"m"+t1+"s"+"_"+t4+"-"+t5+"-"+t6;
-    std::string t = t4+"-"+t5+"-"+t6+"_"+t3+"h"+t2+"m"+t1+"s";
-    return t;
-}
+//     //std::string t = t3+"h"+t2+"m"+t1+"s"+"_"+t4+"-"+t5+"-"+t6;
+//     std::string t = t4+"-"+t5+"-"+t6+"_"+t3+"h"+t2+"m"+t1+"s";
+//     return t;
+// }
 
 /*!
  * \brief extractFNameFrPath - function extract file name from path
@@ -1584,7 +1591,7 @@ std::string currentTime(){
 std::string extractFNameFrPath(std::string pathToMFCFile){
 
     // get filenam
-    std::string base_filename = pathToMFCFile.substr(pathToMFCFile.find_last_of("/\\")+1);
+    std::string base_filename = pathToMFCFile.substr(pathToMFCFile.find_last_of("/")+1);
 
     // remove extension
     std::string::size_type const p(base_filename.find_last_of('.'));
@@ -1609,8 +1616,23 @@ void saveEnrolFRRFARlList(std::string spkLabel,
     std::string base_file = ava::extractFNameFrPath(ss);
 
     std::ofstream logToFile;
-    logToFile.open(pathToSave + "\\" + nameOfTheList, std::ios::app);
+    logToFile.open(pathToSave + "/" + nameOfTheList, std::ios::app);
     logToFile<<spkLabel<<" "<<ava::extractFNameFrPath(ss)<<std::endl;
+}
+
+std::string readFile(const std::string &file)
+{
+    std::ifstream is(file);
+    if( !is.good() ){
+        throw std::runtime_error("Error: stream has errors.");
+    }
+    std::stringstream ss;
+    ss << is.rdbuf();
+    std::string m;
+    // Remove ending line character '\n' or '\r\n'.
+    std::getline(ss, m);
+    return m;
+
 }
 
 

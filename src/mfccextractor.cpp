@@ -114,7 +114,7 @@ std::string MfccExtractor::generujConfigMFCC(std::string SciezkaConfig, std::str
     char __NATURALWRITEORDER = this->NATURALWRITEORDER;
     char __NATURALREADORDER = this->NATURALREADORDER;
 
-    std::string _SciezkaConfig=SciezkaConfig+"\\"+nazwa;
+    std::string _SciezkaConfig=SciezkaConfig+"/"+nazwa;
     //------------------------- tworz plik tekstowy
     std::ofstream DoConfig;
     DoConfig.open(_SciezkaConfig.c_str());
@@ -158,7 +158,7 @@ void MfccExtractor::wywolajHCopy(std::string path_f_hcopy_bin,
 {
     std::string mode_a="-C";
     std::string mode_b="-S";
-    std::string call=path_f_hcopy_bin+" "+mode_a+" "+pathToMfccConfig +" "+mode_b+" "+ path_d_workSpace+"\\"+path_f_flt_fea_list_str;
+    std::string call=path_f_hcopy_bin+" "+mode_a+" "+pathToMfccConfig +" "+mode_b+" "+ path_d_workSpace+"/"+path_f_flt_fea_list_str;
     //std::cout<<call<<std::endl;
     system(call.c_str());
 }

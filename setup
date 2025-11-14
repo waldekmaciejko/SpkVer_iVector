@@ -1,0 +1,143 @@
+#!/bin/bash
+
+echo "========================================================================="
+echo "This automaticly download libs necessery for run SpkVer_iVector v2.0 software"
+echo "========================================================================="
+
+# --------------------
+DIR="$(pwd)"
+echo "$dir"
+
+# --------------------
+EIGEN="eigen.zip"
+OPENBLAS="OpenBLAS.zip"
+#LAPACK="lapackpp-master.zip"
+LAPACK="Lapackpp1_1a.zip"
+QCUSTOMPLOT="QCustomPlot.tar.gz"
+ARMADILLO="armadillo.tar.xz"
+HTK="HTK-r3.4.1_fix.zip"
+
+# --------------------
+PATH_EIGEN="$DIR/$EIGEN"
+#PATH_OPENBLAS="$DIR/$OPENBLAS"
+PATH_QCUSTOMPLOT="$DIR/$QCUSTOMPLOT"
+PATH_ARMADILLO="$DIR/$ARMADILLO"
+#PATH_LAPACK="$DIR/$LAPACK"
+PATH_HTK="$DIR/$HTK"
+
+# --------------------
+URL_EIGEN="https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip"
+URL_OPENBLAS="https://downloads.sourceforge.net/project/openblas/v0.3.18/OpenBLAS%200.3.18%20version.zip?ts=gAAAAABpAgYMhMoWQ3JPdg7ajhazlL13GJ9zIruF21PcKlX5dcpufF-fM1HlaldpK7gcFNBPqqTvQ623gu91LWxf_gxHGWQeYw%3D%3D&r="
+#URL_QCUSTOMPLOT="https://www.qcustomplot.com/release/2.1.0fixed/QCustomPlot.tar.gz"
+URL_QCUSTOMPLOT="https://www.qcustomplot.com/release/2.1.1/QCustomPlot.tar.gz"
+URL_ARMADILLO="https://sourceforge.net/projects/arma/files/armadillo-15.2.1.tar.xz"
+#URL_LAPACKCPP="https://github.com/icl-utk-edu/lapackpp.git"
+#URL_LAPACKCPP="https://math.nist.gov/lapack++/Lapackpp1_1a.zip"
+###https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v3.12.1.tar.gz
+URL_HTK="https://github.com/open-speech/HTK/archive/refs/heads/r3.4.1_fix.zip"
+
+# --------------------
+if [ -f "$PATH_EIGEN" ]; then
+    echo "$EIGEN found"
+else
+    echo "$EIGEN not found, have to download"
+    wget -O "$EIGEN" -c "$URL_EIGEN"
+fi
+
+# --------------------
+#if [ -f "$PATH_OPENBLAS" ]; then
+#    echo "$OPENBLAS found"
+#else
+#    echo "$OPENBLAS not found, have to download"
+#    wget -O "$OPENBLAS" -c "$URL_OPENBLAS"
+#fi
+
+# --------------------
+if [ -f "$PATH_QCUSTOMPLOT" ]; then
+    echo "$QCUSTOMPLOT found"
+else
+    echo "$QCUSTOMPLOT not found, have to download"
+    wget -O "$QCUSTOMPLOT" -c "$URL_QCUSTOMPLOT"
+fi
+
+# --------------------
+if [ -f "$PATH_ARMADILLO" ]; then
+    echo "$ARMADILLO found"
+else
+    echo "$ARMADILLO not found, have to download"
+    wget -O "$ARMADILLO" -c "$URL_ARMADILLO"
+fi
+
+# --------------------
+#if [ -f "$PATH_LAPACK" ]; then
+#    echo "$LAPACK found"
+#else
+#    echo "$LAPACK not found, have to download"
+#    wget -O "$LAPACK" -c "$URL_LAPACKCPP"
+#fi
+
+# --------------------
+if [ -f "$PATH_HTK" ]; then
+    echo "$HTK found"
+else
+    echo "$HTK not found, have to download"
+    wget -O "htk.zip" -c "$URL_HTK"
+fi
+
+unzip -qq -o "$EIGEN" -d "$DIR/libs"
+#unzip -o "$OPENBLAS" -d "$DIR/libs"
+#unzip -o "$LAPACK" -d "$DIR/libs"
+tar xf "$QCUSTOMPLOT" -C "$DIR/libs"
+tar xf "$ARMADILLO" -C "$DIR/libs"
+unzip -qq -o htk.zip -d "$DIR/libs"
+
+
+sudo apt-get install liblapack-dev
+sudo apt-get install liblapack-doc-man
+sudo apt-get install liblapack-doc
+sudo apt-get install liblapack-pic
+sudo apt-get install liblapack3
+sudo apt-get install liblapack-test
+sudo apt-get install liblapack3gf
+sudo apt-get install liblapacke
+sudo apt-get install liblapacke-dev
+sudo apt-get install libopenblas-dev
+sudo apt-get install doxygen
+
+# compilation armadillo
+cd "$DIR/libs/armadillo-15.2.1"
+cmake .
+cmake --build .
+
+cd ..
+cd ..
+
+# compilation OpenBLASS
+#cd "$DIR/libs/OpenBLASS"
+# SEE COMPILATION DETAILS IN README and TargetList
+#make TARGET=NEHALEM
+
+#cd ..
+#cd ..
+
+# compilation LAPACK
+#cd "$DIR/libs/lapackpp-master"
+#make
+#cd ..
+#cd ..
+
+# compilation HTK
+cd lib/HTK
+./configure --prefix=$PWD --disable-hslab
+make all
+
+cd ..
+cd ..
+
+
+
+
+
+
+
+

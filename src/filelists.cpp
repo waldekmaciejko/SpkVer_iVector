@@ -144,7 +144,7 @@ void FileLists::listWavToMfccUBM(std::multimap<std::string, std::string>& multim
             str_tmp = fi.fileName().toStdString();
             size_t pos=str_tmp.find(wavExt);
             str_tmp.replace(pos, wavExt.length(), ".mfc");
-            s2 = flt_fea_fea +"//" + str_tmp;
+            s2 = flt_fea_fea +"/" + str_tmp;
             //flt_fea_mfcc_stream<<spathToWav<<" "<<flt_fea_fea<<"/"<<str_tmp<<std::endl;
             flt_fea_mfcc_stream<<spathToWav<<" "<<s2<<std::endl;
             numFilesUBM=numFilesUBM+1;
@@ -176,9 +176,13 @@ void FileLists::listWavToMfccEnrollTest(std::multimap<std::string, std::string>&
 
     for(std::string s : this->v_to_korpus){
 
-        std::string tmp=(this->workSpace+this->flt_fea_list_str).c_str();
+        std::string tmp=(this->workSpace+"/"+this->flt_fea_list_str).c_str();
 
-        QDirIterator it(QString::fromStdString(s), QStringList()<<"*.wav", QDir::Files, QDirIterator::Subdirectories);
+        QDirIterator it(QString::fromStdString(s),
+                        QStringList()<<"*.wav",
+                        QDir::Files,
+                        QDirIterator::Subdirectories);
+
         std::string wavExt=".wav";
         QString qpathToWav={};
         std::string  spathToWav={};
