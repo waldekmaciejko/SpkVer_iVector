@@ -16,12 +16,15 @@ they have been applied to many problems, like language recognition, speaker diar
 emotion recognition, age estimation, and anti-spoofing [10]. Recently, deep learning techniques
 have been proposed to replace i-vectors with d-vectors or x-vectors [8] [6].
 
+<img src="DETpy/png/det.png" width="400" height="200" />
+<img src="DETpy/png/farrvsfrr.png" width="400" height="200" /></br>
+<img src="DETpy/png/roc.png" width="400" height="200" />
+
 In this example, you develop a simple i-vector system for speaker verification that uses an
 LDA-WCCN backend with either cosine similarity scoring.
 
 **Tools:**
-0. mingw730_64 (7.3.0), C++ v. 201103
-1. Qt Creator 4.15.0, base on Qt 5.15.2 (MSVC 2019, 64 bitowy), version May 4 2021 01:17:10
+1. Qt 
 2. OpenBLAS-0.3.18-x64
 3. QCustomPlot 2.1.0
 4. Armadillo 10.7

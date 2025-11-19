@@ -144,9 +144,13 @@ void enroll(std::set<std::string>& setSpkEnrollTest,
 
     auto stop = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-    std::stringstream ss{};
-    ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-    logger.save("log:", ss);
+    // std::stringstream ss{};
+    // ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
+    // logger.save("log:", ss);
+
+    std::string verbose_str = "enroll module - line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+    logger.save("Execution in point ", verbose_str);
+
 }
 
 void enrollII(std::set<std::string>& setSpkEnrollTest,
@@ -239,9 +243,12 @@ void enrollII(std::set<std::string>& setSpkEnrollTest,
 
     auto stop = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-    std::stringstream ss{};
-    ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-    logger.save("log:", ss);
+    // std::stringstream ss{};
+    // ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
+    // logger.save("log:", ss);
+
+    std::string verbose_str = "enroll module - line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+    logger.save("Execution in point ", verbose_str);
 }
 
 
@@ -351,9 +358,12 @@ void FRR(std::multimap<std::string, std::string>& multimapTestMFC,
 
          auto stop = std::chrono::high_resolution_clock::now();
          std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-         std::stringstream ss{};
-         ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-         logger.save("log:", ss);
+         // std::stringstream ss{};
+         // ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
+         // logger.save("log:", ss);
+
+         std::string verbose_str = "FRR was finished - line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+         logger.save("Execution in point ", verbose_str);
 }
 
 void FAR(std::multimap<std::string, std::string>& multimapTestMFC,
@@ -459,9 +469,12 @@ void FAR(std::multimap<std::string, std::string>& multimapTestMFC,
 
      auto stop = std::chrono::high_resolution_clock::now();
      std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-     std::stringstream ss{};
-     ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
-     logger.save("log:", ss);
+     // std::stringstream ss{};
+     // ss<<"file: "<<__FILE__<<" | line: "<<__LINE__<<" | duration since previous point [sec]: "<<duration.count();
+     // logger.save("log:", ss);
+
+     std::string verbose_str = "FAR was finished - line: "+ std::to_string(__LINE__) + ", (duration sec): " + std::to_string(duration.count());
+     logger.save("Execution in point ", verbose_str);
 
     //*************** END FALSE ACCEPTANCE RATE
 
@@ -470,6 +483,4 @@ void FAR(std::multimap<std::string, std::string>& multimapTestMFC,
     ivectorToTest.clear();
     score.clear();
 }
-
-
 }

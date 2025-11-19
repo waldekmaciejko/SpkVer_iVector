@@ -57,7 +57,7 @@ Waldek Maciejko
 #include "Log4AVA.h"
 #include "enrollFRRFAR.h"
 #include "timeheleprs.h"
-
+#include "createworkspace.h"
 #include "unittests.h"
 
 #include <typeinfo>
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
                   << "\n"
                   << " Compiled on : "<< ava::readFile("/proc/version")<<"\n"
                   << "\n"
-                  << " Usage: ./SpkrVer_iVector -c config.cfg -w workspace.cfg -d data.cfg\n"
+                  << " Example: ./SpkrVer_iVector -c config.cfg -w workspace.cfg -d data.cfg -v\n"
                   << "        ./SpkrVer_iVector -h\n"
                   << "\n"
                   << " For details read README.md. \n"
@@ -138,10 +138,6 @@ int main(int argc, char* argv[]){
     //std::cout << fpconfig.numEigenVoices << '\n' ;
     //std::cout << "test120\n";
 
-    auto test = fpdata.getList_test();
-    auto train = fpdata.getList_train();
-    std::string pToModelFull = fpdata.pWork_path +fpdata.pToModel;
-
 
     //std::cout << "========" <<fpdata.pWork_path << '\n';
 
@@ -159,6 +155,14 @@ int main(int argc, char* argv[]){
     // std::cout << fpworkspace.pEnrollList_file << "\n";
     // std::cout << fpworkspace.pTrainList_file << "\n";
 
+    CreateWorkspace *cw = new CreateWorkspace(fpdata.pWork_path);
+    cw->validateDirs();
+    cw->validateSrtct();
+
+    fpdata.pWork_path =cw->getWorkspace();
+
+    std::cout << fpdata.pWork_path  << std::endl;
+
     ava::Log4AVA logger(fpdata.pWork_path,
                         fpworkspace.pToSaveWSpace+"/",
                         ava::currentTime(),
@@ -167,6 +171,11 @@ int main(int argc, char* argv[]){
                         verbose);
 
     std::string s = logger.returnSavePath();
+
+    auto test = fpdata.getList_test();
+    auto train = fpdata.getList_train();
+    std::string pToModelFull = fpdata.pWork_path +fpdata.pToModel;
+
 
     logger.save("\nStart time:              ", ava::currentTime());
 
@@ -338,10 +347,8 @@ int main(int argc, char* argv[]){
 
         auto stop = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double>  duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-        ss << " main "<< __LINE__ << " (duration sec): "<<duration.count()<<std::endl;
-        logger.save("Execution time in point ", ss);
-        ss.str("");
-        logger.save("Enroll ", "FINISHED");
+        ss << " (duration sec): "<<duration.count()<<std::endl;
+        logger.save("Enroll FINISHED", ss);
     }
     if(fpconfig.enroll == false && fpconfig.train == false){
         std::cout << "We have nothing to do.";

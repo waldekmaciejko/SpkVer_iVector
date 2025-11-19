@@ -1,0 +1,79 @@
+
+Start time:               17-11-2025_9h54m50s
+
+************************* RAPORT START
+
+Used data.cfg:            config.cfg
+Used workspace.cfg:       workspace.cfg
+Used data:                data.cfg
+Train data: 
+/home/ai2/__KORPUSY__/PTDB-TUG/MALE/MIC
+/home/ai2/__KORPUSY__/PTDB-TUG/FEMALE/MIC
+Test data: 
+/home/ai2/__KORPUSY__/PTDB-TUG/MALE/MIC
+/home/ai2/__KORPUSY__/PTDB-TUG/FEMALE/MIC
+
+************************* CONFIG PARAMETERS
+
+numOfComponents:          128
+numIterationsEM:          50
+numIterationsKmean_init:  10
+numTdim:                  100
+numIterationsTV:          20
+performLDA:               true
+performWCCN:              true
+numEigenVectors:          16
+zmiennWhitening:          ZCA
+numEigenVoices:           16
+numIterGPLDA:             10
+minimumDivergence:        true
+SAVETRAINMODEL:           true
+train UBM, TV, Proj Matr: true
+test:                     false
+
+************************* EXECUTION
+
+Traininng Total Variability, Projection Matrcis, iVectors  STARTS
+
+Log from begining of training module on time:  17-11-2025_9h54m50s
+Execution in point  training module - lists were generated, line: 94, (duration sec): 0.111851
+Execution in point  training module - config file for MFCC was generated, line 109, (duration sec): 0.000191
+Execution in point  training module - MFCC were extracted, line 125 (duration sec): 21.489623
+Execution in point  training module - MFCC were loaded to memory, line: 151, (duration sec): 206.097737
+Execution in point  training module - UBM was trained, line: 175, (duration sec): 254.750525
+Execution in point  training module - Baum Welch was finished, line: 205, (duration sec): 261.291547
+Total Variability is training:  17-11-2025_10h2m59s
+  iteration 1  of 20 at time: 17-11-2025_10h2m59s
+  iteration 2  of 20 at time: 17-11-2025_10h3m14s
+  iteration 3  of 20 at time: 17-11-2025_10h3m27s
+  iteration 4  of 20 at time: 17-11-2025_10h3m42s
+  iteration 5  of 20 at time: 17-11-2025_10h3m56s
+  iteration 6  of 20 at time: 17-11-2025_10h4m10s
+  iteration 7  of 20 at time: 17-11-2025_10h4m25s
+  iteration 8  of 20 at time: 17-11-2025_10h4m39s
+  iteration 9  of 20 at time: 17-11-2025_10h4m53s
+  iteration 10  of 20 at time: 17-11-2025_10h5m7s
+  iteration 11  of 20 at time: 17-11-2025_10h5m21s
+  iteration 12  of 20 at time: 17-11-2025_10h5m36s
+  iteration 13  of 20 at time: 17-11-2025_10h5m50s
+  iteration 14  of 20 at time: 17-11-2025_10h6m4s
+  iteration 15  of 20 at time: 17-11-2025_10h6m18s
+  iteration 16  of 20 at time: 17-11-2025_10h6m32s
+  iteration 17  of 20 at time: 17-11-2025_10h6m46s
+  iteration 18  of 20 at time: 17-11-2025_10h7m0s
+  iteration 19  of 20 at time: 17-11-2025_10h7m14s
+  iteration 20  of 20 at time: 17-11-2025_10h7m29s
+Execution in point  training module - Total Variability was estimated, line: 238, (duration sec): 544.794338
+Execution in point  training module - iVectors was estimated, line: 274, (duration sec): 19.082745
+Execution in point  training module - Projecttion Matrix was created, line: 306, (duration sec): 0.030073
+Execution in point  training module - Within Class Covariance Normalization (WCCN) was estimated, line: 327, (duration sec): 0.001853
+Execution in point  training module - Whitening was performed, line: 353, (duration sec): 0.039936
+Execution in point  training module - Gaussian Probabilistic Linear Discriminant Analysis model was trained, line: 409, (duration sec): 0.001923
+MODEL SAVED IN:  /home/ai2/Projects/SpkVer_iVectorRun/WORKSPACE/calc/17-11-2025_9h54m50s_gmm128_TV100
+************************* FUNCTION trainTVPMiVector() STOP
+Execution time in point   main 230 (duration sec): 792.026
+
+
+Traininng Total Variability, Projection Matrics, iVectors  FINISHED
+
+Finish time:               17-11-2025_10h8m2s

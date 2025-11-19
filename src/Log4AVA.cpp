@@ -109,7 +109,6 @@ void Log4AVA::save(const char* s1, const char* s2){
     if (this->verbose == true){
         std::cout << std::string(s1)<<" "<<std::string(s2)<<std::endl;
     }
-
 }
 
 void Log4AVA::save(std::string variableName, unsigned int variableValue){
@@ -165,9 +164,9 @@ void Log4AVA::save(std::string variableName,  std::vector<std::string> pTrain_pa
     }
     logToFile.close();
 
-    std::cout << variableName << std::endl;
-
     if (this->verbose == true){
+
+        std::cout << variableName << std::endl;
 
         for(auto i : pTrain_path){
             std::cout << i << std::endl;

@@ -18,13 +18,6 @@ qt_add_executable(SpkVer_iVector
     src/trainTVPMiVector.cpp
     src/unittests.cpp
     src/config-fileparser.cpp
-    WORKSPACE/calc/placeholder.stayempty
-    WORKSPACE/cfg/placeholder.stayempty
-    WORKSPACE/feat/enroll/placeholder.stayempty
-    WORKSPACE/feat/train/placeholder.stayempty
-    WORKSPACE/feat/placeholder.stayempty
-    WORKSPACE/list/placeholder.stayempty
-    WORKSPACE/logs/placeholder.stayempty
     README.md
     include/enrollFRRFAR.h
     include/filelists.h
@@ -45,7 +38,8 @@ qt_add_executable(SpkVer_iVector
     examples/workspace.cfg
     examples/data.cfg
     include/timeheleprs.h
-    src/timehelpers.cpp
+    src/timehelpers.cpp    
+    include/createworkspace.h src/createworkspace.cpp
 
 )
 
